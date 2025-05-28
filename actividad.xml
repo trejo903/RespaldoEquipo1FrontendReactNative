@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Libro id='001' genero='tecnologia'>
+    <titulo>Aprendiendo XML</titulo>
+    <autor>Juan Diego</autor>
+</libro>
+
+
