@@ -1,18 +1,21 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Button, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function ConfirmToken() {
+export default function CompleteProfile() {
+    const {id} = useLocalSearchParams()
     const router = useRouter();
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            token: ''
+            nombre: '',
+            apellido:''
         }
     });
 
     const onSubmit = async (data) => {
-        const url = "http://192.168.1.3:3000/api/create-account/check-coupon";
+        console.log(data)
+        const url = `http://192.168.1.3:3000/api/create-account/complete-name/${id}`;
         try {
             const req = await fetch(url, {
                 method: 'POST',
@@ -25,7 +28,7 @@ export default function ConfirmToken() {
             console.log(json);
             if (json.ok) {
                 router.replace({
-                    pathname:'/CompleteProfile/[id]',
+                    pathname:'/CompletePassword/[id]',
                     params:{id:json.id.toString()}
                 });
             }
@@ -41,14 +44,14 @@ export default function ConfirmToken() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
             <View style={styles.inner}>
-                <Text style={styles.title}>Confirmar Token</Text>
+                <Text style={styles.title}>Completar nombre</Text>
 
                 <Controller
                     control={control}
-                    rules={{ required: 'El token es obligatorio' }}
+                    rules={{ required: 'El nombre es obligatorio' }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <TextInput
-                            style={[styles.input, errors.token && styles.inputError]}
+                            style={[styles.input, errors.nombre && styles.inputError]}
                             placeholder="Ingresa tu token"
                             placeholderTextColor="#aaa"
                             onBlur={onBlur}
@@ -57,12 +60,30 @@ export default function ConfirmToken() {
                             autoCapitalize="none"
                         />
                     )}
-                    name="token"
+                    name="nombre"
                 />
-                {errors.token && <Text style={styles.errorText}>{errors.token.message}</Text>}
+                {errors.nombre && <Text style={styles.errorText}>{errors.nombre.message}</Text>}
+
+                <Controller
+                    control={control}
+                    rules={{ required: 'El nombre es obligatorio' }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={[styles.input, errors.apellido && styles.inputError]}
+                            placeholder="Ingresa tu apellido"
+                            placeholderTextColor="#aaa"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            autoCapitalize="none"
+                        />
+                    )}
+                    name="apellido"
+                />
+                {errors.apellido && <Text style={styles.errorText}>{errors.apellido.message}</Text>}
 
                 <View style={styles.buttonContainer}>
-                    <Button title="Verificar Token" color="#4a90e2" onPress={handleSubmit(onSubmit)} />
+                    <Button title="Confirmar nombre" color="#4a90e2" onPress={handleSubmit(onSubmit)} />
                 </View>
             </View>
         </KeyboardAvoidingView>

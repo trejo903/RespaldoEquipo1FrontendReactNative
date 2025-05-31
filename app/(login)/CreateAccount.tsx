@@ -1,8 +1,6 @@
-import { Text, TextInput, View, StyleSheet } from "react-native";
+import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from 'react-hook-form';
-import { Button } from "react-native";
-import { Link } from "expo-router";
-import { useRouter } from 'expo-router';
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 export default function Login() {
     const router = useRouter()
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -24,7 +22,7 @@ export default function Login() {
             })
             const json = await req.json()
             if(json.ok){
-                router.push('/ConfirmToken')
+                router.replace('/ConfirmToken')
             }
         } catch (error) {
             console.log(error)

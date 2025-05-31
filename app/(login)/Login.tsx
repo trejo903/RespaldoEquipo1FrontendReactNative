@@ -1,7 +1,7 @@
 import { Text, TextInput, View, StyleSheet } from "react-native";
 import { Controller, useForm } from 'react-hook-form';
 import { Button } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export default function Login() {
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -10,10 +10,30 @@ export default function Login() {
             password: ''
         }
     });
-
-    const onSubmit = data => {
+    const router = useRouter();
+    const onSubmit = async(data) => {
         console.log(data);
+
         // Aquí puedes agregar la lógica de autenticación
+        const url = "http://192.168.1.3:3000/api/login";
+        try {
+            const req = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const json = await req.json();
+            console.log(json);
+            if (json.ok) {
+                router.replace({
+                    pathname:'/'
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
