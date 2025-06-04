@@ -7,13 +7,18 @@ export default function Perfil() {
 
       <Link href={{ pathname: '/(login)/Login' }} asChild>
         <TouchableOpacity style={styles.option}>
-          <Text style={styles.optionText}>Mi cuenta</Text>
+          <Text style={styles.optionText}>Iniciar Sesion</Text>
         </TouchableOpacity>
       </Link>
 
-      <TouchableOpacity style={styles.option}>
-        <Text style={styles.optionText}>Mis tarjetas</Text>
+      <Link
+        href={{pathname:'/(moviles2)/profile'}}
+        asChild
+      >
+      <TouchableOpacity style={styles.option} >
+        <Text style={styles.optionText}>Aplicacion de moviles</Text>
       </TouchableOpacity>
+      </Link>
 
       <TouchableOpacity style={styles.option}>
         <Text style={styles.optionText}>Ayuda</Text>

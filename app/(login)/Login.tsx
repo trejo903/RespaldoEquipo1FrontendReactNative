@@ -15,7 +15,7 @@ export default function Login() {
         console.log(data);
 
         // Aquí puedes agregar la lógica de autenticación
-        const url = "http://192.168.1.3:3000/api/login";
+        const url = "http://192.168.0.149:3000/api/login";
         try {
             const req = await fetch(url, {
                 method: 'POST',

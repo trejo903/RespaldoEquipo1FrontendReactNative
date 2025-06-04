@@ -15,7 +15,7 @@ export default function CompleteProfile() {
 
     const onSubmit = async (data) => {
         console.log(data)
-        const url = `http://192.168.1.3:3000/api/create-account/complete-name/${id}`;
+        const url = `http://192.168.0.149:3000/api/create-account/complete-name/${id}`;
         try {
             const req = await fetch(url, {
                 method: 'POST',

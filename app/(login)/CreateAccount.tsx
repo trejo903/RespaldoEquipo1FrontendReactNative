@@ -10,7 +10,7 @@ export default function Login() {
     });
 
     const onSubmit = async(data) => {
-        const url = "http://192.168.1.3:3000/api/create-account"
+        const url = "http://192.168.0.149:3000/api/create-account"
         try {
             
             const req = await fetch(url,{

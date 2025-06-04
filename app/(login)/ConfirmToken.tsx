@@ -12,7 +12,7 @@ export default function ConfirmToken() {
     });
 
     const onSubmit = async (data) => {
-        const url = "http://192.168.1.3:3000/api/create-account/check-coupon";
+        const url = "http://192.168.0.149:3000/api/create-account/check-coupon";
         try {
             const req = await fetch(url, {
                 method: 'POST',

@@ -1,13 +1,33 @@
+import { useStore } from "@/src/store";
+import { Button } from "react-native";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  RefreshControl,
+  Image,
+} from "react-native";
+
+type Products={
+  id: number,
+  nombre: string,
+  descripcion: string,
+  imagen: string,
+  inventario: number,
+  precio: string
+}
 
 export default function Index() {
-  const [datos, setDatos] = useState([]);
-  const[refreshing,setRefreshing]=useState(false)
-  const obtenerPerfiles = async () => {
+  const agregarAlCarrito= useStore(state=>state.agregarAlCarrito)
+  const [datos, setDatos] = useState<Products[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const obtenerProductos = async () => {
     try {
-      const req = await fetch("https://equipo1backendcorreosdemexico.onrender.com/api/profile");
+      const req = await fetch("http://192.168.0.149:3000/api/products");
       const json = await req.json();
       setDatos(json);
     } catch (error) {
@@ -15,55 +35,88 @@ export default function Index() {
     }
   };
 
-  const onRefresh=async()=>{
-    setRefreshing(true)
-    await obtenerPerfiles()
-    setRefreshing(false)
-  }
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await obtenerProductos();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
-    obtenerPerfiles();
+    obtenerProductos();
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={{ padding: 20, backgroundColor: "#f5f5f5", flexGrow: 1 }}
+    <ScrollView
+      contentContainerStyle={{
+        padding: 20,
+        backgroundColor: "#f9f9f9",
+        flexGrow: 1,
+      }}
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" }}>
-        Lista de Perfiles
-      </Text>
+
 
       {datos.length === 0 ? (
-        <Text style={{ textAlign: "center", fontSize: 16 }}>Cargando perfiles...</Text>
+        <Text style={{ textAlign: "center", fontSize: 16 }}>
+          Cargando productos...
+        </Text>
       ) : (
-        datos.map((perfil: { id: number; nombre: string; numero: string }, index) => (
+        datos.map((producto) => (
           <Link
-            key={perfil.id}
+            key={producto.id}
             href={{
               pathname: `/(users)/profile`,
-              params: { id: perfil.id.toString() },
+              params: { id: producto.id.toString() },
             }}
             asChild
           >
             <TouchableOpacity
               style={{
-                backgroundColor: "#ffffff",
-                padding: 16,
+                backgroundColor: "#fff",
                 borderRadius: 12,
-                marginBottom: 12,
+                marginBottom: 16,
+                padding: 16,
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
                 elevation: 3,
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: 18, fontWeight: "600", color: "#333" }}>
-                {perfil.nombre}
-              </Text>
-              <Text style={{ fontSize: 14, color: "#666" }}>Número: {perfil.numero}</Text>
+              <Image
+                source={{ uri: `${producto.imagen}` }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 10,
+                  marginRight: 16,
+                  backgroundColor: "#eee",
+                }}
+              />
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 18, fontWeight: "bold", color: "#333" }}>
+                  {producto.nombre}
+                </Text>
+                <Text style={{ fontSize: 14, color: "#777", marginTop: 4 }}>
+                  {producto.descripcion}
+                </Text>
+                <Text style={{ fontSize: 14, color: "#555", marginTop: 4 }}>
+                  Inventario: {producto.inventario}
+                </Text>
+                <Text style={{ fontSize: 16, color: "#1e88e5", marginTop: 6 }}>
+                  ${producto.precio}
+                </Text>
+                <Button
+                title="Agregar"
+                onPress={()=>{
+                  agregarAlCarrito(producto)
+                }}
+              />
+              </View>
             </TouchableOpacity>
           </Link>
         ))
