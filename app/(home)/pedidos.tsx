@@ -7,6 +7,7 @@ export default function Pedidos() {
       <Text style={styles.message}>
         Por favor inicia sesión para visualizar tus pedidos
       </Text>
+      
     </View>
   );
 }

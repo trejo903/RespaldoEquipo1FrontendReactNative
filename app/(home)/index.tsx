@@ -1,4 +1,4 @@
-import { useStore } from "@/src/store";
+import { backend, useStore } from "@/src/store";
 import { Button } from "react-native";
 import { Link } from "expo-router";
 import { useEffect, useState } from "react";
@@ -27,7 +27,7 @@ export default function Index() {
 
   const obtenerProductos = async () => {
     try {
-      const req = await fetch("http://192.168.0.149:3000/api/products");
+      const req = await fetch(`${backend}/api/products`);
       const json = await req.json();
       setDatos(json);
     } catch (error) {

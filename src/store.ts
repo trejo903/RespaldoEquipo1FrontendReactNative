@@ -1,5 +1,7 @@
 import {create} from 'zustand'
 
+export const backend = "http://192.168.0.148:3000"
+
 type CartType={
     id: number,
     nombre: string,
